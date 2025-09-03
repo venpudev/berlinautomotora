@@ -25,8 +25,15 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
         {/* Status Badge */}
         <div className="absolute top-3 right-3">
           {vehicle.available ? (
-            <div className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-              ✓ Disponible
+            <div className="space-y-2">
+              {vehicle.label && (
+                <div className="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+                  {vehicle.label}
+                </div>
+              )}
+              <div className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+                ✓ Disponible
+              </div>
             </div>
           ) : (
             <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">

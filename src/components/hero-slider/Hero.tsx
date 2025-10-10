@@ -25,8 +25,8 @@ interface SlideData {
 const slideImages: SlideData[] = [
   {
     src: slide01.src,
-    alt: "Interior moderno de automóvil",
-    title: "En Wild Cars",
+    alt: "Tu próximo automóvil",
+    title: "En Berlin Automotora",
     subtitle: "Tu próximo auto te está esperando",
   },
   {

@@ -1,15 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import { Image } from 'astro:assets';
-
-import falabella from '../../assets/brands/Banco-falabella.png';
-import santander from '../../assets/brands/Santander-finance.png';
-import tanner from '../../assets/brands/Tanner.png';
-import unidad from '../../assets/brands/Unidad-financiera.png';
-import venpu from '../../assets/brands/Venpu.png';
-import autofin from '../../assets/brands/autofin.png';
-import bciSeguros from '../../assets/brands/bci-seguros.png';
 
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -74,37 +65,37 @@ if (typeof document !== 'undefined') {
 const brands = [
   {
     name: 'Banco Falabella',
-    logo: falabella,
+    logo: '/Banco-falabella.png',
     alt: 'Banco Falabella Logo'
   },
   {
     name: 'Santander Finance',      
-    logo: santander,  
+    logo: '/Santander-finance.png',  
     alt: 'Santander Finance Logo' 
   },  
   {
     name: 'Tanner',      
-    logo: tanner,  
+    logo: '/Tanner.png',  
     alt: 'Tanner Logo' 
   },
   {
     name: 'Unidad',      
-    logo: unidad,  
+    logo: '/Unidad-financiera.png',  
     alt: 'Unidad Logo' 
   }, 
   {
     name: 'Venpu',
-    logo: venpu,
+    logo: '/Venpu.png',
     alt: 'Venpu Logo'
   },
   {
     name: 'Autofin',
-    logo: autofin,
+    logo: '/autofin.png',
     alt: 'Autofin Logo'
   },
   {
     name: 'BCI Seguros',
-    logo: bciSeguros,
+    logo: '/bci-seguros.png',
     alt: 'BCI Seguros Logo'
   }
 ];
@@ -162,7 +153,7 @@ export default function BrandSlider() {
               <SwiperSlide key={index} className="!w-auto">
                 <div className="flex items-center justify-center h-24 px-4 group">
                   <div className="transition-all duration-300 group-hover:scale-110 group-hover:opacity-80">
-                    <Image
+                    <img
                       className="max-h-16 w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
                       src={brand.logo}
                       alt={brand.alt}

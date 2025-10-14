@@ -1,7 +1,7 @@
 # 🚗 Wildcars - Plataforma de Vehículos Premium
 
 <div align="center">
-  <img src="./public/logowildars.webp" alt="Wildcars Logo" width="300" height="auto">
+  <img src="./public/logo-berlin.png" alt="Berlin Automotora Logo" width="300" height="auto">
   
   **Donde los buenos autos encuentran buenos dueños**
   

@@ -1,0 +1,358 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {fetchAllVehicles, getCarsByIds} from '../../lib/fetchSliders';
+import { formatNameForURL, extractYearFromName } from "../../helpers/stringHelpers";
+import { formatPrice } from "../../helpers/formatHelpers";
+
+export const prerender = false;
+
+const { name } = Astro.params || {};
+const autos = await fetchAllVehicles();
+const foundVehicle = autos.find(
+  (v) => formatNameForURL(v.name) === name
+);
+
+if (!foundVehicle) {
+  throw new Error(`No se encontró el vehículo con nombre: ${name}`);
+}
+
+const response = await getCarsByIds({ id: String(foundVehicle.id) });
+
+if (!response || !response.status) {
+  throw new Error(`No se encontró el vehículo con ID: ${foundVehicle.id}`);
+}
+
+const vehicle = response.data;
+
+const formattedPrice = formatPrice(vehicle.price);
+const vehicleYear = extractYearFromName(vehicle.name);
+
+const vehicleImages = vehicle.imageGallery && vehicle.imageGallery.length > 0
+  ? vehicle.imageGallery.map(img => {
+      if (typeof img === 'string') return img;
+      if (typeof img === 'object' && img !== null) {
+        return (img as any).imageUrl || (img as any).url || vehicle.imageUrl;
+      }
+      return vehicle.imageUrl;
+    }).filter(Boolean)
+  : [vehicle.imageUrl].filter(Boolean);
+
+  const ogImage = vehicleImages[0];
+---
+
+<Layout title={`${vehicle.name} - Berlin Automotora`} description={`${vehicle.name} - ${formattedPrice}`} image={ogImage}>
+
+  <main class="md:w-7xl mx-auto py-[80px] md:py-[120px] px-5 md:px-10">
+
+     <nav class="text-sm text-gray-600 py-3">
+        <a href="/" class="hover:text-blue-600">Inicio</a>
+        <span class="mx-2">></span>
+        <a href="/catalogo" class="hover:text-blue-600">Vehículos</a>
+        <span class="mx-2">></span>
+        <span class="text-gray-900">{vehicle.name}</span>
+      </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+     
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-sm border-gray-200 border p-4 mb-6">
+          <div class="flex gap-4">
+            {vehicleImages.length > 1 && (
+              <div class="flex flex-col w-20 md:w-24">
+                {vehicleImages.length > 6 && (
+                  <button
+                    id="scroll-up-btn"
+                    class="w-full bg-white hover:bg-gray-50 text-gray-700 py-2 rounded-t border border-gray-100 transition-colors shadow-sm mb-1 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    aria-label="Ver imágenes anteriores"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                  </button>
+                )}
+               
+                <div class="flex flex-col gap-2 thumbnail-viewport" id="thumbnails-container">
+                  {vehicleImages.map((image, index) => (
+                    <button
+                      type="button"
+                      class={`thumbnail-btn w-full h-16 md:h-20 rounded border-2 transition-all duration-200 overflow-hidden flex-shrink-0 ${index === 0 ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-100 hover:border-blue-300'} ${index >= 6 ? 'hidden' : ''}`}
+                      data-index={index}
+                      data-image-src={image}
+                      aria-label={`Ver imagen ${index + 1}`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${vehicle.name} - Miniatura ${index + 1}`}
+                        class="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+               
+                {vehicleImages.length > 6 && (
+                  <button
+                    id="scroll-down-btn"
+                    class="w-full bg-white hover:bg-gray-50 text-gray-700 py-2 rounded-b border border-gray-100 transition-colors shadow-sm mt-1 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    aria-label="Ver más imágenes"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </button>
+                )}
+              </div>
+            )}
+
+            <div class="relative flex-1">
+              <img
+                id="main-image"
+                src={vehicleImages[0]}
+                alt={`${vehicle.name} - Berlin Automotora`}
+                class="w-full h-full object-cover rounded-lg cursor-zoom-in transition-all duration-500 ease-in-out"
+              />
+             
+              {vehicleImages.length > 1 && (
+                <div class="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                  <span id="current-index">1</span> / {vehicleImages.length}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border-gray-200 border p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-900">Características</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            
+            <div class="flex items-center space-x-2">
+              <span class="text-gray-400">📅</span>
+              <div>
+                <p class="text-sm text-gray-600">Año</p>
+                <p class:list={[
+                    "font-semibold",
+                    { 'text-red-500': !vehicleYear }
+                ]}>
+                    {vehicleYear || 'N/A'}
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+              <span class="text-gray-400">🚗</span>
+              <div>
+                <p class="text-sm text-gray-600">Kilometraje</p>
+                <p class="font-semibold">{vehicle.miles?.toLocaleString() || 'N/A'} km</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-gray-400">⛽</span>
+              <div>
+                <p class="text-sm text-gray-600">Combustible</p>
+                <p class="font-semibold">{vehicle.fuelType || 'N/A'}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-gray-400">⚙️</span>
+              <div>
+                <p class="text-sm text-gray-600">Transmisión</p>
+                <p class="font-semibold">{vehicle.transmission || 'N/A'}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-gray-400">📍</span>
+              <div>
+                <p class="text-sm text-gray-600">Ubicación</p>
+                <p class="font-semibold">{vehicle.vendedor?.sucursal || 'No especificada'}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-gray-400">🏷️</span>
+              <div>
+                <p class="text-sm text-gray-600">Estado</p>
+                <p class={`font-semibold ${vehicle.available ? 'text-green-600' : 'text-red-600'}`}>
+                  {vehicle.available ? 'Disponible' : 'Vendido'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border-gray-200 border p-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-900">Descripción</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+              {vehicle.description || `Este ${vehicle.name} es una excelente opción para quienes buscan un vehículo confiable y con gran desempeño. Con ${vehicle.miles?.toLocaleString()} kilómetros recorridos y motor ${vehicle.fuelType}, representa una oportunidad única en el mercado.`}
+            </p>
+            <p>
+              El vehículo cuenta con transmisión {vehicle.transmission} y se encuentra en excelentes condiciones.
+              Ideal para uso familiar o trabajo, combina comodidad, seguridad y eficiencia en un solo paquete.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-1">
+        <div class="sticky top-28">
+          <div class="bg-white rounded-lg shadow-sm border-gray-200 border p-6 mb-6">
+            <div class="mb-4">
+              <h1 class="text-2xl font-bold text-gray-900 mb-2">{vehicle.name}</h1>
+              {vehicle.available ? (
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  ✓ Disponible
+                </span>
+              ) : (
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                  ✗ Vendido
+                </span>
+              )}
+            </div>
+
+            <div class="mb-6">
+              <p class="text-3xl font-bold text-gray-900">{formattedPrice}</p>
+              <p class="text-sm text-gray-600">Precio final</p>
+            </div>
+
+            <a
+              href="/contacto"
+              class={`w-full font-bold py-3 px-4 rounded-lg transition-colors text-center block ${
+                vehicle.available
+                  ? 'bg-green-600 hover:bg-green-700 text-white'
+                  : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+              }`}
+            >
+              Contactar vendedor
+            </a>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-sm border-gray-200 border p-6">
+            <h3 class="text-lg font-bold mb-4">Medios de pago</h3>
+            <div class="space-y-3">
+              <div class="flex items-center space-x-2">
+                <span class="text-green-500">✓</span>
+                <span class="text-sm">Efectivo</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="text-green-500">✓</span>
+                <span class="text-sm">Transferencia bancaria</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="text-green-500">✓</span>
+                <span class="text-sm">Financiamiento disponible</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mainImage = document.getElementById('main-image');
+    const currentIndexSpan = document.getElementById('current-index');
+    const thumbnailBtns = document.querySelectorAll('.thumbnail-btn');
+    const scrollUpBtn = document.getElementById('scroll-up-btn');
+    const scrollDownBtn = document.getElementById('scroll-down-btn');
+    const thumbnailsContainer = document.getElementById('thumbnails-container');
+    
+    let currentImageIndex = 0;
+    let visibleThumbnails = 6; // Número de miniaturas visibles
+    let startIndex = 0; // Índice de inicio de las miniaturas visibles
+    
+    // Función para actualizar la imagen principal con efecto de transición
+    function updateMainImage(index) {
+      if (mainImage && currentIndexSpan) {
+        const imageSrc = thumbnailBtns[index]?.getAttribute('data-image-src');
+        if (imageSrc && imageSrc !== mainImage.src) {
+          // Agregar clase de transición
+          mainImage.style.opacity = '0.7';
+          mainImage.style.transform = 'scale(1.02)';
+          
+          // Cambiar la imagen después de un breve delay
+          setTimeout(() => {
+            mainImage.src = imageSrc;
+            currentImageIndex = index;
+            currentIndexSpan.textContent = index + 1;
+            
+            // Restaurar opacidad y escala
+            mainImage.style.opacity = '1';
+            mainImage.style.transform = 'scale(1)';
+          }, 150);
+          
+          // Actualizar el estado activo de las miniaturas
+          thumbnailBtns.forEach((btn, i) => {
+            btn.classList.remove('border-blue-500', 'ring-2', 'ring-blue-200');
+            btn.classList.add('border-gray-100');
+            
+            if (i === index) {
+              btn.classList.remove('border-gray-100');
+              btn.classList.add('border-blue-500', 'ring-2', 'ring-blue-200');
+            }
+          });
+        }
+      }
+    }
+    
+    // Función para actualizar la visibilidad de las miniaturas
+    function updateThumbnailsVisibility() {
+      thumbnailBtns.forEach((btn, index) => {
+        if (index >= startIndex && index < startIndex + visibleThumbnails) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+      
+      // Actualizar estado de los botones de scroll
+      if (scrollUpBtn) {
+        scrollUpBtn.disabled = startIndex === 0;
+      }
+      if (scrollDownBtn) {
+        scrollDownBtn.disabled = startIndex + visibleThumbnails >= thumbnailBtns.length;
+      }
+    }
+    
+    // Event listeners para las miniaturas
+    thumbnailBtns.forEach((btn, index) => {
+      btn.addEventListener('click', function() {
+        updateMainImage(index);
+      });
+    });
+    
+    // Event listeners para los botones de scroll
+    if (scrollUpBtn) {
+      scrollUpBtn.addEventListener('click', function() {
+        if (startIndex > 0) {
+          startIndex--;
+          updateThumbnailsVisibility();
+        }
+      });
+    }
+    
+    if (scrollDownBtn) {
+      scrollDownBtn.addEventListener('click', function() {
+        if (startIndex + visibleThumbnails < thumbnailBtns.length) {
+          startIndex++;
+          updateThumbnailsVisibility();
+        }
+      });
+    }
+    
+    // Inicializar
+    updateThumbnailsVisibility();
+    
+    // Navegación con teclado
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft' && currentImageIndex > 0) {
+        updateMainImage(currentImageIndex - 1);
+      } else if (e.key === 'ArrowRight' && currentImageIndex < thumbnailBtns.length - 1) {
+        updateMainImage(currentImageIndex + 1);
+      }
+    });
+  });
+</script>
+
+<style>
+  /* ... tus estilos existentes ... */
+</style>

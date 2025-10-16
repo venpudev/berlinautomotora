@@ -28,7 +28,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Verificar hCaptcha con el servidor de hCaptcha
-    const hcaptchaResponse = await fetch('https://hcaptcha.com/siteverify', {
+    const hcaptchaVerifyResponse = await fetch('https://hcaptcha.com/siteverify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -40,7 +40,7 @@ export const POST: APIRoute = async ({ request }) => {
       })
     });
 
-    const hcaptchaResult = await hcaptchaResponse.json();
+    const hcaptchaResult = await hcaptchaVerifyResponse.json();
     if (!hcaptchaResult.success) {
       return new Response(JSON.stringify({ 
         error: 'Verificación de seguridad fallida' 

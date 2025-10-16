@@ -1,6 +1,6 @@
-import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_Dvh0lmxh.mjs';
+import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_nAoO3lyM.mjs';
 import 'kleur/colors';
-import { $ as $$Layout } from '../chunks/Layout_BnuGeWrr.mjs';
+import { $ as $$Layout } from '../chunks/Layout_F7AhD4GW.mjs';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { useState, useEffect, useMemo } from 'react';
 import { V as VehicleCard } from '../chunks/ProductCard_oDAjdR-n.mjs';

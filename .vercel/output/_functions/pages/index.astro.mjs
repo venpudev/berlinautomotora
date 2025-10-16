@@ -1,6 +1,6 @@
-import { c as createComponent, e as createAstro, m as maybeRenderHead, a as renderTemplate, r as renderComponent, d as addAttribute } from '../chunks/astro/server_Dvh0lmxh.mjs';
+import { c as createComponent, e as createAstro, m as maybeRenderHead, a as renderTemplate, r as renderComponent, d as addAttribute, F as Fragment } from '../chunks/astro/server_nAoO3lyM.mjs';
 import 'kleur/colors';
-import { $ as $$Layout } from '../chunks/Layout_BnuGeWrr.mjs';
+import { $ as $$Layout } from '../chunks/Layout_F7AhD4GW.mjs';
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { useRef, useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -238,7 +238,7 @@ const $$BannerStock = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$BannerStock;
   const { title } = Astro2.props;
-  return renderTemplate`${maybeRenderHead()}<div class="w-full bg-[#020617] relative min-h-[100px]" data-astro-cid-unrifklh> <div class="banner-content" data-astro-cid-unrifklh> <h2 data-astro-cid-unrifklh>${title}</h2> <a href="/vehicles" class="arrows-container" data-astro-cid-unrifklh> <div class="arrow" data-astro-cid-unrifklh></div> <div class="arrow" data-astro-cid-unrifklh></div> <div class="arrow" data-astro-cid-unrifklh></div> </a> </div> </div> `;
+  return renderTemplate`${maybeRenderHead()}<div class="w-full bg-[#020617] relative min-h-[100px]" data-astro-cid-unrifklh> <div class="banner-content" data-astro-cid-unrifklh> <h2 data-astro-cid-unrifklh>${title}</h2> <a href="/catalogo" class="arrows-container" data-astro-cid-unrifklh> <div class="arrow" data-astro-cid-unrifklh></div> <div class="arrow" data-astro-cid-unrifklh></div> <div class="arrow" data-astro-cid-unrifklh></div> </a> </div> </div> `;
 }, "/Users/matias/Repositorios/berlinautomotora/src/components/banner-stock/BannerStock.astro", void 0);
 
 const sliderStyles = `
@@ -608,7 +608,9 @@ const $$Services = createComponent(($$result, $$props, $$slots) => {
         repeating-linear-gradient(112.5deg, transparent, transparent 2px, rgba(55, 65, 81, 0.04) 2px, rgba(55, 65, 81, 0.04) 3px, transparent 3px, transparent 8px),
         repeating-linear-gradient(157.5deg, transparent, transparent 2px, rgba(31, 41, 55, 0.03) 2px, rgba(31, 41, 55, 0.03) 3px, transparent 3px, transparent 8px)
       `
-  }, "style")}></div> <div class="md:w-7xl mx-auto px-4"> <h2 class="text-center text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">Servicios</h2> <p class="text-xl text-center text-gray-600 mb-12">Asesoramiento automotriz especializado en compra y venta de vehículos</p> <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> ${services.map((service) => renderTemplate`<div class="relative rounded-2xl overflow-hidden shadow-lg group"> <img${addAttribute(service.img, "src")}${addAttribute(service.title, "alt")} class="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-300"> <div class="absolute inset-0 bg-black/50 flex flex-col justify-center items-center px-4"> <h3 class="text-white text-2xl font-bold mb-2 text-center drop-shadow-lg">${service.title}</h3> <p class="text-white text-base text-center opacity-90 drop-shadow-md">${service.desc}</p> </div> </div>`)} </div> </div> </section>`;
+  }, "style")}></div> <div class="md:w-7xl mx-auto px-4"> <h2 class="text-center text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">Servicios</h2> <p class="text-xl text-center text-gray-600 mb-12">Asesoramiento automotriz especializado en compra y venta de vehículos</p> <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> ${services.map((service) => renderTemplate`<div class="relative rounded-2xl overflow-hidden shadow-lg group"> ${service.title === "Financiamiento Flexible" ? renderTemplate`<a href="/financiamiento" class="block"> <img${addAttribute(service.img, "src")}${addAttribute(service.title, "alt")} class="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-300"> <div class="absolute inset-0 bg-black/50 flex flex-col justify-center items-center px-4 group-hover:bg-black/60 transition-colors duration-300"> <h3 class="text-white text-2xl font-bold mb-2 text-center drop-shadow-lg">${service.title}</h3> <p class="text-white text-base text-center opacity-90 drop-shadow-md">${service.desc}</p> <div class="mt-3 px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+Ver más →
+</div> </div> </a>` : renderTemplate`${renderComponent($$result, "Fragment", Fragment, {}, { "default": ($$result2) => renderTemplate` <img${addAttribute(service.img, "src")}${addAttribute(service.title, "alt")} class="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-300"> <div class="absolute inset-0 bg-black/50 flex flex-col justify-center items-center px-4"> <h3 class="text-white text-2xl font-bold mb-2 text-center drop-shadow-lg">${service.title}</h3> <p class="text-white text-base text-center opacity-90 drop-shadow-md">${service.desc}</p> </div> ` })}`} </div>`)} </div> </div> </section>`;
 }, "/Users/matias/Repositorios/berlinautomotora/src/components/service-cars/Services.astro", void 0);
 
 const $$Index = createComponent(($$result, $$props, $$slots) => {

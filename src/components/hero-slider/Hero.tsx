@@ -22,16 +22,20 @@ interface HeroProps {
 const Hero: React.FC<HeroProps> = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
-  // Si no hay imágenes, no renderizar nada para evitar errores.
+  // Si no hay imágenes, muestra un placeholder.
   if (!images || images.length === 0) {
-    return null;
+    return (
+        <div className="w-full h-[450px] md:h-[600px] bg-gray-200 rounded-lg flex items-center justify-center">
+            <p className="text-gray-500">No hay imágenes disponibles.</p>
+        </div>
+    );
   }
 
   return (
     <div className="w-full">
       <style>{paginationStyles}</style>
       
-      {/* Slider Principal */}
+      {/* Slider Principal con altura aumentada */}
       <Swiper
         loop={true}
         spaceBetween={10}
@@ -39,14 +43,16 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
         thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
         pagination={{ clickable: true }}
         modules={[FreeMode, Navigation, Thumbs, Pagination]}
-        className="h-96 w-full rounded-lg"
+        // --- CAMBIO DE ALTURA AQUÍ ---
+        className="w-full rounded-lg h-[450px] md:h-[600px]"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
             <img 
               src={image.url} 
               alt={image.alt || `Imagen de vehículo ${index + 1}`} 
-              className="h-96 w-full object-cover" 
+              // --- CAMBIO DE ALTURA AQUÍ (para llenar el contenedor) ---
+              className="h-full w-full object-cover" 
             />
           </SwiperSlide>
         ))}
@@ -61,7 +67,8 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
-        className="mt-4 hidden h-26 w-full rounded-lg md:block"
+        // --- CAMBIO DE ALTURA Y VISIBILIDAD AQUÍ ---
+        className="mt-4 hidden h-24 w-full rounded-lg md:block"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>

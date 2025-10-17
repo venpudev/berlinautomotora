@@ -30,6 +30,7 @@ if (!vehicle) {
 
 const formattedPrice = formatPrice(vehicle.price);
 const vehicleYear = extractYearFromName(vehicle.name);
+const whatsappLink = `https://wa.me/56963361016?text=Hola,%20me%20interesa%20el%20vehículo:%20${encodeURIComponent(vehicle.name)}`;
 
 let finalImages: { url: string; alt: string }[] = [];
 if (vehicle.imageGallery && Array.isArray(vehicle.imageGallery) && vehicle.imageGallery.length > 0) {
@@ -44,7 +45,6 @@ if (vehicle.imageGallery && Array.isArray(vehicle.imageGallery) && vehicle.image
 }
 
 const ogImage = finalImages.length > 0 ? finalImages[0].url : '/default-og-image.jpg';
-const whatsappLink = `https://wa.me/56963361016?text=Hola,%20me%20interesa%20el%20vehículo:%20${encodeURIComponent(vehicle.name)}`;
 ---
 
 <Layout title={`${vehicle.name} - Berlin Automotora`} description={`${vehicle.name} - ${formattedPrice}`} image={ogImage}>
@@ -62,7 +62,9 @@ const whatsappLink = `https://wa.me/56963361016?text=Hola,%20me%20interesa%20el%
             
             <div class="lg:col-span-2 space-y-8">
                 
-                <Hero client:load images={finalImages} />
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                    <Hero client:load images={finalImages} />
+                </div>
 
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                     <h2 class="text-2xl font-bold text-gray-800 border-b pb-3 mb-4">Características</h2>
@@ -111,7 +113,6 @@ const whatsappLink = `https://wa.me/56963361016?text=Hola,%20me%20interesa%20el%
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="h-16"></div>

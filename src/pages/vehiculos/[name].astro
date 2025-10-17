@@ -48,7 +48,7 @@ const ogImage = finalImages.length > 0 ? finalImages[0].url : '/default-og-image
 ---
 
 <Layout title={`${vehicle.name} - Berlin Automotora`} description={`${vehicle.name} - ${formattedPrice}`} image={ogImage}>
-    <main class="min-h-screen bg-gray-50 pt-24">
+    <main class="min-h-screen bg-gray-50 pt-32">
         
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-sm text-gray-600">
             <a href="/" class="hover:text-red-600">Inicio</a>
@@ -118,3 +118,19 @@ const ogImage = finalImages.length > 0 ? finalImages[0].url : '/default-og-image
         <div class="h-16"></div>
     </main>
 </Layout>
+
+<style>
+    /* Seleccionamos las imágenes dentro de la galería */
+    .swiper-slide img {
+        /* Definimos una transición suave para las propiedades 'transform' y 'filter' */
+        transition: transform 0.4s ease, filter 0.4s ease;
+    }
+
+    /* Al pasar el cursor sobre un slide, aplicamos el efecto a la imagen que contiene */
+    .swiper-slide:hover img {
+        /* Aumentamos ligeramente la escala para un efecto de zoom sutil */
+        transform: scale(1.03);
+        /* Aumentamos ligeramente el brillo para destacar la imagen */
+        filter: brightness(1.05);
+    }
+</style>

@@ -2,28 +2,42 @@ import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs, Pagination } from 'swiper/modules';
 
-// Estilos de Swiper
+// Swiper styles
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
 
-// Estilos para la paginación (dots)
-const paginationStyles = `
+// Inline styles for pagination dots and hover effect
+const componentStyles = `
+  /* Pagination dots */
   .swiper-pagination-bullet { background-color: #333 !important; opacity: 0.6 !important; }
   .swiper-pagination-bullet-active { background-color: #000 !important; opacity: 1 !important; }
+
+  /* --- HOVER EFFECT STYLES --- */
+  /* Target images within slides */
+  .swiper-slide img {
+    /* Smooth transition */
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+  /* Apply effect on hover */
+  .swiper-slide:hover img {
+    /* Slight zoom */
+    transform: scale(1.03);
+    /* Slight brightness increase */
+    filter: brightness(1.05);
+  }
 `;
 
 interface HeroProps {
-  images: { url: string; alt: string }[];
+  images?: { url: string; alt: string }[];
 }
 
-const Hero: React.FC<HeroProps> = ({ images }) => {
+const Hero: React.FC<HeroProps> = ({ images = [] }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
-  // Si no hay imágenes, muestra un placeholder.
-  if (!images || images.length === 0) {
+  if (images.length === 0) {
     return (
         <div className="w-full h-[450px] md:h-[600px] bg-gray-200 rounded-lg flex items-center justify-center">
             <p className="text-gray-500">No hay imágenes disponibles.</p>
@@ -33,9 +47,10 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
 
   return (
     <div className="w-full">
-      <style>{paginationStyles}</style>
+      {/* Inject styles */}
+      <style>{componentStyles}</style>
       
-      {/* Slider Principal con altura aumentada */}
+      {/* Main Slider */}
       <Swiper
         loop={true}
         spaceBetween={10}
@@ -43,22 +58,20 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
         thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
         pagination={{ clickable: true }}
         modules={[FreeMode, Navigation, Thumbs, Pagination]}
-        // --- CAMBIO DE ALTURA AQUÍ ---
-        className="w-full rounded-lg h-[450px] md:h-[600px]"
+        className="w-full rounded-lg h-[450px] md:h-[600px]" // Updated height
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
             <img 
               src={image.url} 
               alt={image.alt || `Imagen de vehículo ${index + 1}`} 
-              // --- CAMBIO DE ALTURA AQUÍ (para llenar el contenedor) ---
               className="h-full w-full object-cover" 
             />
           </SwiperSlide>
         ))}
       </Swiper>
       
-      {/* Slider de Miniaturas (solo para escritorio) */}
+      {/* Thumbnails Slider (Desktop only) */}
       <Swiper
         onSwiper={setThumbsSwiper}
         loop={true}
@@ -67,8 +80,7 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
-        // --- CAMBIO DE ALTURA Y VISIBILIDAD AQUÍ ---
-        className="mt-4 hidden h-24 w-full rounded-lg md:block"
+        className="mt-4 hidden h-24 w-full rounded-lg md:block" // Updated height
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>

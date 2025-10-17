@@ -13,7 +13,6 @@ if (!name) {
     return new Response(null, { status: 404, statusText: 'Página no encontrada' });
 }
 
-// --- LÓGICA DE OBTENCIÓN DE DATOS ---
 const allVehicles = await fetchAllVehicles();
 const vehicleData = allVehicles.find(v => formatNameForURL(v.name) === name);
 
@@ -24,18 +23,14 @@ if (!vehicleData) {
 const response = await getCarsByIds({ id: String(vehicleData.id) });
 const vehicle = response?.data;
 
-// --- VALIDACIÓN DEFINITIVA ---
-// Si 'vehicle' no existe después de la llamada a la API, detenemos todo aquí.
 if (!vehicle) {
     console.error(`Error: No se encontraron datos para el vehículo con ID: ${vehicleData.id}`);
     return new Response(null, { status: 404, statusText: 'Datos del vehículo no disponibles' });
 }
 
-// --- PREPARACIÓN DE DATOS PARA EL COMPONENTE ---
 const formattedPrice = formatPrice(vehicle.price);
 const vehicleYear = extractYearFromName(vehicle.name);
 
-// Lógica segura para construir el array de imágenes
 let finalImages: { url: string; alt: string }[] = [];
 if (vehicle.imageGallery && Array.isArray(vehicle.imageGallery) && vehicle.imageGallery.length > 0) {
     finalImages = vehicle.imageGallery
@@ -79,5 +74,35 @@ const ogImage = finalImages.length > 0 ? finalImages[0].url : '/default-og-image
             </div>
         </div>
 
+        <div class="max-w-7xl mx-auto mt-8 md:mt-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
+
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">
+                        Características
+                    </h2>
+                    <div class="space-y-3 text-gray-700">
+                        <div class="flex justify-between"><span><strong>Año:</strong></span> <span>{vehicleYear || 'N/A'}</span></div>
+                        <div class="flex justify-between"><span><strong>Kilometraje:</strong></span> <span>{vehicle.miles?.toLocaleString('es-CL') || 'N/A'} km</span></div>
+                        <div class="flex justify-between"><span><strong>Combustible:</strong></span> <span>{vehicle.fuelType || 'N/A'}</span></div>
+                        <div class="flex justify-between"><span><strong>Transmisión:</strong></span> <span>{vehicle.transmission || 'N/A'}</span></div>
+                        <div class="flex justify-between"><span><strong>Ubicación:</strong></span> <span>{vehicle.vendedor?.sucursal || 'No especificada'}</span></div>
+                        <div class="flex justify-between"><span><strong>Estado:</strong></span> <span class=`font-semibold ${vehicle.available ? 'text-green-600' : 'text-red-600'}`}>{vehicle.available ? 'Disponible' : 'Vendido'}</span></div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-3">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">
+                        Descripción
+                    </h2>
+                    <div class="prose max-w-none text-gray-700">
+                        <p class="text-base leading-relaxed">
+                            {vehicle.description || `Este ${vehicle.name} es una excelente opción para quienes buscan un vehículo confiable y con gran desempeño. Representa una oportunidad única en el mercado.`}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         </main>
 </Layout>

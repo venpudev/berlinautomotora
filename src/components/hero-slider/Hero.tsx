@@ -39,14 +39,14 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
         thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
         pagination={{ clickable: true }}
         modules={[FreeMode, Navigation, Thumbs, Pagination]}
-        className="h-100w-full rounded-lg"
+        className="h-96 w-full rounded-lg"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
             <img 
               src={image.url} 
               alt={image.alt || `Imagen de vehículo ${index + 1}`} 
-              className="h-full w-full object-cover" 
+              className="h-96 w-full object-cover" 
             />
           </SwiperSlide>
         ))}
@@ -61,7 +61,7 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
-        className="mt-4 hidden h-38 w-full rounded-lg md:block"
+        className="mt-4 hidden h-26 w-full rounded-lg md:block"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>

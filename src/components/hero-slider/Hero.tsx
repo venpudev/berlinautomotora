@@ -61,7 +61,7 @@ const Hero: React.FC<HeroProps> = ({ images }) => {
         freeMode={true}
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
-        className="mt-4 hidden h-32 w-full rounded-lg md:block"
+        className="mt-4 hidden h-38 w-full rounded-lg md:block"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>

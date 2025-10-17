@@ -44,65 +44,76 @@ if (vehicle.imageGallery && Array.isArray(vehicle.imageGallery) && vehicle.image
 }
 
 const ogImage = finalImages.length > 0 ? finalImages[0].url : '/default-og-image.jpg';
+const whatsappLink = `https://wa.me/56963361016?text=Hola,%20me%20interesa%20el%20vehículo:%20${encodeURIComponent(vehicle.name)}`;
 ---
 
 <Layout title={`${vehicle.name} - Berlin Automotora`} description={`${vehicle.name} - ${formattedPrice}`} image={ogImage}>
-    <main class="min-h-screen bg-gray-50">
-        <nav class="bg-white border-b border-gray-200 px-4 py-3 sticky top-[5rem] z-40">
-            <div class="max-w-7xl mx-auto flex items-center text-sm text-gray-600">
-                <a href="/" class="hover:text-red-600">Inicio</a>
-                <span class="mx-2">/</span>
-                <a href="/catalogo" class="hover:text-red-600">Vehículos</a>
-                <span class="mx-2">/</span>
-                <span class="text-gray-900 font-medium truncate">{vehicle.name}</span>
-            </div>
+    <main class="min-h-screen bg-gray-50 pt-24">
+        
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-sm text-gray-600">
+            <a href="/" class="hover:text-red-600">Inicio</a>
+            <span class="mx-2">/</span>
+            <a href="/catalogo" class="hover:text-red-600">Vehículos</a>
+            <span class="mx-2">/</span>
+            <span class="text-gray-900 font-medium truncate">{vehicle.name}</span>
         </nav>
 
-        <div class="max-w-7xl mx-auto py-8 px-4">
-            <Hero client:load images={finalImages} />
-        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-8">
+                
+                <Hero client:load images={finalImages} />
 
-        <div class="bg-white border-t border-b border-gray-200 px-4 py-4">
-            <div class="max-w-7xl mx-auto">
-                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">{vehicle.name}</h1>
-                <div class="flex items-center space-x-3">
-                    <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${vehicle.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                        {vehicle.available ? 'Disponible' : 'Vendido'}
-                    </span>
-                    <span class="text-2xl md:text-3xl font-bold text-gray-900">{formattedPrice}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto mt-8 md:mt-12 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
-
-                <div class="md:col-span-2">
-                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">
-                        Características
-                    </h2>
-                    <div class="space-y-3 text-gray-700">
-                        <div class="flex justify-between"><span><strong>Año:</strong></span> <span>{vehicleYear || 'N/A'}</span></div>
-                        <div class="flex justify-between"><span><strong>Kilometraje:</strong></span> <span>{vehicle.miles?.toLocaleString('es-CL') || 'N/A'} km</span></div>
-                        <div class="flex justify-between"><span><strong>Combustible:</strong></span> <span>{vehicle.fuelType || 'N/A'}</span></div>
-                        <div class="flex justify-between"><span><strong>Transmisión:</strong></span> <span>{vehicle.transmission || 'N/A'}</span></div>
-                        <div class="flex justify-between"><span><strong>Ubicación:</strong></span> <span>{vehicle.vendedor?.sucursal || 'No especificada'}</span></div>
-                        <div class="flex justify-between"><span><strong>Estado:</strong></span> <span class=`font-semibold ${vehicle.available ? 'text-green-600' : 'text-red-600'}`}>{vehicle.available ? 'Disponible' : 'Vendido'}</span></div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-3 mb-4">Características</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
+                        <div class="flex items-center space-x-3"><span class="text-red-500">📅</span> <div><p class="text-sm text-gray-500">Año</p><p class="font-semibold">{vehicleYear || 'N/A'}</p></div></div>
+                        <div class="flex items-center space-x-3"><span class="text-red-500">🚗</span> <div><p class="text-sm text-gray-500">Kilometraje</p><p class="font-semibold">{vehicle.miles?.toLocaleString('es-CL') || 'N/A'} km</p></div></div>
+                        <div class="flex items-center space-x-3"><span class="text-red-500">⛽</span> <div><p class="text-sm text-gray-500">Combustible</p><p class="font-semibold">{vehicle.fuelType || 'N/A'}</p></div></div>
+                        <div class="flex items-center space-x-3"><span class="text-red-500">⚙️</span> <div><p class="text-sm text-gray-500">Transmisión</p><p class="font-semibold">{vehicle.transmission || 'N/A'}</p></div></div>
+                        <div class="flex items-center space-x-3"><span class="text-red-500">📍</span> <div><p class="text-sm text-gray-500">Ubicación</p><p class="font-semibold">{vehicle.vendedor?.sucursal || 'No especificada'}</p></div></div>
+                        <div class="flex items-center space-x-3"><span class="text-red-500">🏷️</span> <div><p class="text-sm text-gray-500">Estado</p><p class={`font-semibold ${vehicle.available ? 'text-green-600' : 'text-red-600'}`}>{vehicle.available ? 'Disponible' : 'Vendido'}</p></div></div>
                     </div>
                 </div>
 
-                <div class="md:col-span-3">
-                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">
-                        Descripción
-                    </h2>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-3 mb-4">Descripción</h2>
                     <div class="prose max-w-none text-gray-700">
                         <p class="text-base leading-relaxed">
                             {vehicle.description || `Este ${vehicle.name} es una excelente opción para quienes buscan un vehículo confiable y con gran desempeño. Representa una oportunidad única en el mercado.`}
                         </p>
                     </div>
                 </div>
-
             </div>
+
+            <div class="lg:col-span-1">
+                <div class="sticky top-28 space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h1 class="text-2xl font-bold text-gray-900 mb-2">{vehicle.name}</h1>
+                        <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mb-4 ${vehicle.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                            {vehicle.available ? '✓ Disponible' : '✗ Vendido'}
+                        </span>
+                        <div class="mb-6">
+                            <p class="text-3xl font-bold text-gray-900">{formattedPrice}</p>
+                            <p class="text-sm text-gray-600">Precio final</p>
+                        </div>
+                        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class={`w-full font-bold py-3 px-4 rounded-lg transition-colors text-center block ${vehicle.available ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-400 text-gray-600 cursor-not-allowed'}`}>
+                            Contactar por WhatsApp
+                        </a>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 class="text-lg font-bold mb-4">Medios de pago</h3>
+                        <div class="space-y-3 text-gray-700">
+                            <div class="flex items-center space-x-2"><span class="text-green-500">✓</span><span class="text-sm">Efectivo</span></div>
+                            <div class="flex items-center space-x-2"><span class="text-green-500">✓</span><span class="text-sm">Transferencia bancaria</span></div>
+                            <div class="flex items-center space-x-2"><span class="text-green-500">✓</span><span class="text-sm">Financiamiento disponible</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        </main>
+
+        <div class="h-16"></div>
+    </main>
 </Layout>

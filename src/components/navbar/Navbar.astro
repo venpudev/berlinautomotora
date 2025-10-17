@@ -4,7 +4,7 @@ import Hamburger from "../hamburger-menu/Hamburger.astro";
 const logo = {
     src: "/logo-berlin.png",
     alt: "Berlin Automotora Logo",
-    width: 220, // Ajustado para el nuevo tamaño
+    width: 220,
     height: 88
 };
 
@@ -20,24 +20,25 @@ const socialLinks = [
         name: "Facebook",
         href: "https://web.facebook.com/profile.php?id=61552210761850",
         iconClass: "fab fa-facebook-f",
-        hoverColor: "hover:text-blue-500" // Hover sobre el ícono
+        hoverColor: "hover:text-blue-500"
     },
     {
         name: "Instagram",
         href: "https://www.instagram.com/berlinautomotora/",
         iconClass: "fab fa-instagram",
-        hoverColor: "hover:text-pink-500" // Hover sobre el ícono
+        hoverColor: "hover:text-pink-500"
     }
 ];
 ---
 
-<header class="bg-black fixed w-full top-0 z-50 border-b border-gray-800/70 shadow-2xl">
+<header id="main-header" class="bg-black fixed w-full top-0 z-50 border-b border-gray-800/70 shadow-lg transition-all duration-300 ease-in-out">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-24">
+        <div id="header-content" class="flex justify-between items-center h-24 transition-all duration-300 ease-in-out">
 
             <div class="flex-shrink-0">
                 <a href="/" class="flex items-center">
-                    <img class="h-20 w-auto" src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} />
+                    {/* El logo también se encogerá con el scroll gracias a las clases de su contenedor */}
+                    <img id="header-logo" class="h-20 w-auto transition-all duration-300 ease-in-out" src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} />
                 </a>
             </div>
 
@@ -57,7 +58,7 @@ const socialLinks = [
                         </a>
                     ))}
                 </div>
-                <a href="/consignacion" class="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-md hover:bg-blue-700 transition-all duration-300 text-sm shadow-lg transform hover:scale-105">
+                <a href="/consignacion" class="bg-red-600 text-white font-bold px-5 py-2.5 rounded-md hover:bg-red-700 transition-all duration-300 text-sm shadow-lg transform hover:scale-105">
                     Vende tu Auto
                 </a>
             </div>
@@ -69,3 +70,26 @@ const socialLinks = [
         </div>
     </div>
 </header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const header = document.getElementById('main-header');
+        const headerContent = document.getElementById('header-content');
+        const headerLogo = document.getElementById('header-logo');
+
+        if (header && headerContent && headerLogo) {
+            const handleScroll = () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('bg-opacity-90', 'backdrop-blur-sm');
+                    headerContent.style.height = '5rem'; // h-20
+                    headerLogo.style.height = '4rem'; // h-16
+                } else {
+                    header.classList.remove('bg-opacity-90', 'backdrop-blur-sm');
+                    headerContent.style.height = '6rem'; // h-24
+                    headerLogo.style.height = '5rem'; // h-20
+                }
+            };
+            window.addEventListener('scroll', handleScroll);
+        }
+    });
+</script>
